@@ -51,8 +51,12 @@ def takeCss(url):
     css_url = [link["href"] for link in r.findAll("link") if "stylesheet" in link.get("rel",[])]
     for x in css_url:
         y = x.split('/',-1)[-1]
-        outpath = os.path.join("css",y)
-        urlretrieve(x,outpath)
+        if str(y).endswith(".css"):
+            outpath = os.path.join("css",y)
+            urlretrieve(x,outpath)
+        else:
+            outpath = os.path.join("css", y+".css")
+            urlretrieve(x, outpath)
 
 def takeImage(url):
     parsed = list(urlparse(url))
@@ -68,4 +72,4 @@ def takeImage(url):
         else:
             urlretrieve(urlunparse(parsed), outpath)
 
-
+takeCss(urlBuona)
