@@ -4,11 +4,13 @@ import urllib.error
 import urllib.parse
 from bs4 import BeautifulSoup
 import os
-
+import logging
+import sys
+from datetime import datetime
 
 #Legge file .json. Ritorna un dizionario con {nome sito web, array di url}
 def readJson():
-    return json.load(open('/home/gianlorenzo/AGIW/dexter_urls_category_notebook.json'))
+    return json.load(open('/home/davben/AGIW/dexter_urls_category_notebook.json'))
 
 #Ritorna tutte le chiavi del dizionario
 def takeAllKeys():
@@ -32,26 +34,48 @@ def openUrl(url):
 
 
 def writeAllFile():
+    log = open("writeAllFile.log","a")
+    sys.stdout = log
+    print("start "+datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
+    logging.warn("start "+datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
     keys = takeAllKeys()
+    print("prese le chiavi..")
     os.makedirs("notebook")
+    print("creata dir notebook")
+    logging.warn("creata dir notebook")
     for key in keys:
-        os.makedirs("/home/gianlorenzo/PycharmProjects/AGIW/TakeUrls/notebook/"+str(key))
-        index = open("/home/gianlorenzo/PycharmProjects/AGIW/TakeUrls/notebook/"+str(key)+"/"+"index.txt","w+")
+        logging.warn("creo cartella: "+str(key))
+        os.makedirs("/home/davben/git/AGIW-master/AGIW/TakeUrls/notebook/"+str(key))
+        print("creata dir: "+str(key)+"..")
+        index = open("/home/davben/git/AGIW-master/AGIW/TakeUrls/notebook/"+str(key)+"/"+"index.txt","w+")
+        print("creato file index ..")
         i=1
+        print("leggo lista di html in chiave: "+str(key)+"..")
         for value in readJson()[key]:
             try:
                 soup = takeHtmlContent(value)
+                print("prendo HtmlContent di "+str(value)+"..")
             except urllib.request.URLError as e:
                 index.write(str(value)+"\t"+str(e.reason)+"\n")
+                logging.warn("non scrivo " + str(i) + ".html" + " in " + str(key))
             except urllib.request.HTTPError as e:
                 index.write(str(value)+"\t"+str(e.code)+"\n")
+                logging.warn("non scrivo " + str(i) + ".html" + " in " + str(key))
             else:
                 index.write(str(value)+"\t"+str(i)+".html"+"\n")
-                html = open("/home/gianlorenzo/PycharmProjects/AGIW/TakeUrls/notebook/"+str(key)+"/"+str(i)+".html","w+")
+                print("scrivo "+str(i)+".html"+" in "+str(key))
+                logging.warn("scrivo "+str(i)+".html"+" in "+str(key))
+                html = open("/home/davben/git/AGIW-master/AGIW/TakeUrls/notebook/"+str(key)+"/"+str(i)+".html","w+")
                 html.write(str(soup))
                 html.close()
             i = i+1
+        logging.warn(datetime.now().strftime('%Y-%m-%d %H:%M:%S')+ " fine scrittura degli html in "+str(key))
+        print(datetime.now().strftime('%Y-%m-%d %H:%M:%S')+ " fine scrittura degli html in "+str(key))
+        logging.warn("ho letto: "+str(i)+" pagine html..")
+        print("finita scrittura di index della cartella: "+str(key))
         index.close()
+    logging.warn("fine "+datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
+    print("fine "+datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
 
 
 writeAllFile()
