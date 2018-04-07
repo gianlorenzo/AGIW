@@ -8,6 +8,7 @@ import sys
 import logging
 from datetime import datetime
 import http.client
+from socket import error as SocketError
 
 
 #Legge file .json. Ritorna un dizionario con {nome sito web, array di url}
@@ -69,6 +70,9 @@ def writeAllFile():
             except http.client.HTTPException:
                 index.write(str(value) + "\t" + "HTTPException" + "\n")
                 logging.warning("non scrivo " + str(i) + ".html" + " in " + str(key))
+            except SocketError:
+                index.write(str(value) + "\t" + "HTTPException" + "\n")
+                logging.warning("non scrivo " + str(i) + ".html" + " in " + str(key))
             else:
                 index.write(str(value)+"\t"+str(i)+".html"+"\n")
                 print("scrivo "+str(i)+".html"+" in "+str(key))
@@ -85,12 +89,14 @@ def writeAllFile():
         print("fine " + datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
 
 
-writeAllFile()
+#writeAllFile()
 
-#def prova(url):
- #   try:
-  #      u = takeHtmlContent(url)
-   # except http.client.HTTPException:
-    #    print("HTTPException")
+def prova(url):
+    try:
+        u = takeHtmlContent(url)
+    except http.client.HTTPException:
+        print("HTTPException")
+    except SocketError:
+        print("SocketError")
 
-#print(prova("http://getcomputer.net/5054-565108-B00MD7ARMO-Toshiba_Satellite_C55_B5201_156_Laptop_Intel_Celeron_Processor_N2830_4GB_RAM_500GB_Hard_Drive_DVD/u00b1RW_CD_RW_drive_Windows_81_Jet_Black.html"))
+print(prova("http://shopping.dealtime.com/msi gt70 dominator 892 17 3 1 tb intel core i7 4th gen 2 7 ghz 24 gb notebook brush aluminum black 9s7 1763a2 892/info"))
