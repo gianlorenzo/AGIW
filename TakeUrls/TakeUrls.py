@@ -85,8 +85,7 @@ def writeAllFile():
         print("fine " + datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
 
 
-#writeAllFile()
-print(len(takeAllKeys()))
+writeAllFile()
 
 #def prova(url):
  #   try:
