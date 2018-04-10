@@ -13,7 +13,15 @@ from socket import error as SocketError
 
 #Legge file .json. Ritorna un dizionario con {nome sito web, array di url}
 def readJson():
-    return json.load(open('/home/gianlorenzo/AGIW/dexter_urls_category_notebook.json'))
+    return json.load(open('/home/gianlorenzo/AGIW/www.kkelectronic.com.json'))
+
+def writeExc():
+    f = open ("/home/gianlorenzo/htmlexc/www.kkelectronic.com/index.txt","w+")
+    for value in readJson()["www.kkelectronic.com"]:
+        f.write(str(value)+"   "+"Not Found"+"\n")
+    f.close()
+
+writeExc()
 
 #Ritorna tutte le chiavi del dizionario
 def takeAllKeys():
@@ -89,14 +97,5 @@ def writeAllFile():
         print("fine " + datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
 
 
-#writeAllFile()
 
-def prova(url):
-    try:
-        u = takeHtmlContent(url)
-    except http.client.HTTPException:
-        print("HTTPException")
-    except SocketError:
-        print("SocketError")
 
-print(prova("http://shopping.dealtime.com/msi gt70 dominator 892 17 3 1 tb intel core i7 4th gen 2 7 ghz 24 gb notebook brush aluminum black 9s7 1763a2 892/info"))

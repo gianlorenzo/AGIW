@@ -4,9 +4,9 @@ from pandas import DataFrame
 import numpy as np
 
 #dir che porta alla cartella occurrence extractor
-dirInputNotebook = "/home/davben/AGIW/notebook"
-dirGlobaleDav = "/home/davben/AGIW/occurrence-extractor"
-dirOutputGlobaleDav="/home/davben/AGIW/Step1/"
+dirInputNotebook = "/home/gianlorenzo/AGIW/notebook"
+dirGlobaleDav = "/home/gianlorenzo/AGIW/app/occurrence-extractor"
+dirOutputGlobaleDav="/home/gianlorenzo/AGIW/Step1/"
 comandoDir="cd "+dirGlobaleDav
 comandoClassifier="python2.7 -m src.model.specificationextractor "
 # se nella cartella ci sta solo un index non la analizzo
@@ -30,14 +30,6 @@ def getProductSpecifies(dirNotebook):
             for i in URLBuone:
                 #applico il classificatore
                 os.system(comandoClassifier+" "+i+" "+dirOutputGlobaleDav+dir+i.json)
-
-
-
-
-        
-
-
-
 
 
 #prendo il file index e lo trasformo in una matrice :link,errore/nomefile
