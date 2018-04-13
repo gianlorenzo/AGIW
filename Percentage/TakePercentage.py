@@ -11,4 +11,5 @@ def getTotalDirectoryWithHtml(url):
             i = i+1
     print("Le cartelle con html sono " + str(i) + " su " + str(checkDir(url)))
 
-getTotalDirectoryWithHtml("/home/gianlorenzo/AGIW/notebook/")
+getTotalDirectoryWithHte
+tml("/home/gianlorenzo/AGIW/notebook/")

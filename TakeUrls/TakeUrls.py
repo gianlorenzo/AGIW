@@ -21,8 +21,6 @@ def writeExc():
         f.write(str(value)+"   "+"Not Found"+"\n")
     f.close()
 
-writeExc()
-
 #Ritorna tutte le chiavi del dizionario
 def takeAllKeys():
    return list(readJson())
@@ -37,6 +35,7 @@ def takeHtmlContent(url):
     resultText = result.read()
     soup = BeautifulSoup(resultText,"lxml")
     return soup
+
 
 def openUrl(url):
     request = urllib.request.Request(url)
