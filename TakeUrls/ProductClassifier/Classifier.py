@@ -17,28 +17,34 @@ def takeTable():
     sys.stdout = log
     print("start " + datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
     logging.warning("start " + datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
-    listaDir = os.listdir("/home/gianlorenzo/AGIW/ProvaUl/")
+    listaDir = os.listdir("/home/gianlorenzo/AGIW/OurStep1/")
     for dir in listaDir:
         print("sono nella cartella: " + str(dir))
         logging.warning("sono nella cartella: " + str(dir))
-        if not checkDir("/home/gianlorenzo/AGIW/ProvaUl/"+dir)==1:
+        if not checkDir("/home/gianlorenzo/AGIW/OurStep1/"+dir)==1:
             os.mkdir("/home/gianlorenzo/AGIW/JSONSTEP1(4)/"+dir)
-            listaFile = os.listdir("/home/gianlorenzo/AGIW/ProvaUl/"+dir)
+            listaFile = os.listdir("/home/gianlorenzo/AGIW/OurStep1/"+dir)
             listaFile.remove("index.txt")
             listaFile.sort()
             j=1
             for file in listaFile:
-                f = codecs.open("/home/gianlorenzo/AGIW/ProvaUl/"+dir+"/"+file, 'r')
+                f = codecs.open("/home/gianlorenzo/AGIW/OurStep1/"+dir+"/"+file, 'r')
                 html = f.read()
 
                 soup = bs4.BeautifulSoup(html, "html.parser")
 
                 table = soup.find_all("table")
                 array = []
+                kw = keywords(dir,file,dir,[])
                 for t in table:
                     string = str(t)
-                    if "Product:" in string or "product:" in string or "price" in string or "Price" in string:
-                        array.append(t)
+                    if kw:
+                        for key in kw:
+                            if key in string:
+                                array.append(t)
+                    else:
+                        if "Product:" in string or "product:" in string or "price" in string or "Price" in string:
+                            array.append(t)
                 o = []
                 for t in array:
                     for row in t.find_all('tr'):
@@ -75,30 +81,29 @@ def takeTable():
 
 
 
-def keywords(name,found_titles):
-    f = codecs.open("/home/gianlorenzo/AGIW/ProvaUl/www.superbiiz.com/28.html", 'r')
+def keywords(dir,file,name,found_titles):
+    f = codecs.open("/home/gianlorenzo/AGIW/OurStep1/" + dir + "/" + file, 'r')
     html = f.read()
     soup = bs4.BeautifulSoup(html, "html.parser")
-    title = soup.title.string.lower()
-    keywords = soup.select('meta[name="keywords"]')[0]['content'].split(",")
 
-    if name in keywords:
-        keywords.remove(name)
-
-    cleaned_keywords = []
-
-    for k in keywords:
-        for k in title:
-            cleaned_keywords.append(k)
-    if(len(cleaned_keywords))>0 and title not in found_titles:
-        found_titles.append(title)
-
-    return cleaned_keywords
-
-print(keywords("www.superbiiz.com",[]))
+    try:
+        title = soup.title.string.lower()
+        keywords = soup.select('meta[name="keywords"]')[0]['content'].lower().split(",")
 
 
+        if name in keywords:
+            keywords.remove(name)
 
+        cleaned_keywords = []
 
+        for k in keywords:
+            for k in title:
+                cleaned_keywords.append(k)
+        if(len(cleaned_keywords))>0 and title not in found_titles:
+            found_titles.append(title)
 
+        return cleaned_keywords
+    except:
+        print("no keywords")
 
+takeTable()

@@ -5,9 +5,9 @@ import json
 import parsel
 import re
 
-dir = "www.superbiiz.com"
+dir5 = "www.superbiiz.com"
 file = "4.html"
-f = codecs.open("/home/davben/AGIW/notebook/"+dir+"/"+file, 'r')
+f = codecs.open("/home/gianlorenzo/AGIW/notebook/"+dir5+"/"+file, 'r')
 
 
 dir = "/home/davben/AGIW/FileProvaClassifier/28/28.html"
@@ -15,7 +15,7 @@ dir2 = "/home/davben/AGIW/FileProvaClassifier/39/39.html"
 dir3 = "/home/davben/AGIW/FileProvaClassifier/4/4.html"
 
 
-f=codecs.open(dir3, 'r')
+f=codecs.open("/home/gianlorenzo/AGIW/notebook/"+dir5+"/"+file, 'r')
 html = (f.read())
 array=[]
 arrayx = []
@@ -44,7 +44,7 @@ else:
 #print(arrays[0])
 #for i in arrays:
     #print(i)
-doc = parsel.Selector(text=str(table[22]))
+doc = parsel.Selector(text=str(table))
 element = doc.xpath('//ul')
     #print((element))
     #print(str(i))
