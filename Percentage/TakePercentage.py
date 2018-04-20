@@ -5,11 +5,14 @@ def checkDir(dir):
 
 def getTotalDirectoryWithHtml(url):
     listaDir = os.listdir(url)
-    i = 0
+
+    len = 0
+    numDir=0
     for dir in listaDir:
-        if not checkDir(url+dir)==1:
-            i = i+1
-    print("Le cartelle con html sono " + str(i) + " su " + str(checkDir(url)))
+        len = len + checkDir(url+dir)
+        numDir = numDir+1
+    print(str(len))
+    print(str(numDir))
 
 
-getTotalDirectoryWithHtml("/media/gianlorenzo/UBUNTU 17_1/notebook/")
+getTotalDirectoryWithHtml("/home/gianlorenzo/AGIW/JSONSTEP1(4)/")

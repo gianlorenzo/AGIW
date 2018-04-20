@@ -5,6 +5,7 @@ import json
 import os
 import sys
 from datetime import datetime
+import unicodedata
 
 
 def checkDir(dir):
@@ -12,23 +13,23 @@ def checkDir(dir):
     return (len(os.listdir(dir)))
 
 def takeTable():
-    os.mkdir("/home/gianlorenzo/AGIW/JSONSTEP1(4)")
-    log = open("/home/gianlorenzo/AGIW/JSONSTEP1(4)/writeLogJson.log","a")
+    os.mkdir("/home/gianlorenzo/AGIW/JSONSTEP1(5)")
+    log = open("/home/gianlorenzo/AGIW/JSONSTEP1(5)/writeLogJson.log","a")
     sys.stdout = log
     print("start " + datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
     logging.warning("start " + datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
-    listaDir = os.listdir("/home/gianlorenzo/AGIW/OurStep1/")
+    listaDir = os.listdir("/home/gianlorenzo/AGIW/DominiProvaDav/")
     for dir in listaDir:
         print("sono nella cartella: " + str(dir))
         logging.warning("sono nella cartella: " + str(dir))
-        if not checkDir("/home/gianlorenzo/AGIW/OurStep1/"+dir)==1:
-            os.mkdir("/home/gianlorenzo/AGIW/JSONSTEP1(4)/"+dir)
-            listaFile = os.listdir("/home/gianlorenzo/AGIW/OurStep1/"+dir)
+        if not checkDir("/home/gianlorenzo/AGIW/DominiProvaDav/"+dir)==1:
+            os.mkdir("/home/gianlorenzo/AGIW/JSONSTEP1(5)/"+dir)
+            listaFile = os.listdir("/home/gianlorenzo/AGIW/DominiProvaDav/"+dir)
             listaFile.remove("index.txt")
             listaFile.sort()
             j=1
             for file in listaFile:
-                f = codecs.open("/home/gianlorenzo/AGIW/OurStep1/"+dir+"/"+file, 'r')
+                f = codecs.open("/home/gianlorenzo/AGIW/DominiProvaDav/"+dir+"/"+file, 'r')
                 html = f.read()
 
                 soup = bs4.BeautifulSoup(html, "html.parser")
@@ -70,7 +71,7 @@ def takeTable():
                 while (i < len(o) - 1):
                     dict[o[i]] = o[i + 1]
                     i = i + 2
-                file = open("/home/gianlorenzo/AGIW/JSONSTEP1(4)/"+dir+"/"+str(j)+".json", "w+")
+                file = open("/home/gianlorenzo/AGIW/JSONSTEP1(5)/"+dir+"/"+str(j)+".json", "w+")
                 json.dump(dict, file)
                 file.close()
                 print("sono nella cartella: " + str(dir)+" ho scritto il file"+str(j)+".json")
@@ -82,7 +83,7 @@ def takeTable():
 
 
 def keywords(dir,file,name,found_titles):
-    f = codecs.open("/home/gianlorenzo/AGIW/OurStep1/" + dir + "/" + file, 'r')
+    f = codecs.open("/home/gianlorenzo/AGIW/notebook/" + dir + "/" + file, 'r')
     html = f.read()
     soup = bs4.BeautifulSoup(html, "html.parser")
 
@@ -94,7 +95,7 @@ def keywords(dir,file,name,found_titles):
         if name in keywords:
             keywords.remove(name)
 
-        cleaned_keywords = []
+        cleaned_keywords    = []
 
         for k in keywords:
             for k in title:
@@ -106,4 +107,3 @@ def keywords(dir,file,name,found_titles):
     except:
         print("no keywords")
 
-takeTable()

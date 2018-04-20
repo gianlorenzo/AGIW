@@ -12,8 +12,8 @@ def checkDir(dir):
     return (len(os.listdir(dir)))
 
 def takeTable():
-    os.mkdir("/home/gianlorenzo/AGIW/JSONSTEP1(4)")
-    log = open("/home/gianlorenzo/AGIW/JSONSTEP1(4)/writeLogJson.log","a")
+    os.mkdir("/home/gianlorenzo/AGIW/JSONSTEP1(5)")
+    log = open("/home/gianlorenzo/AGIW/JSONSTEP1(5)/writeLogJson.log","a")
     sys.stdout = log
     print("start " + datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
     logging.warning("start " + datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
@@ -22,7 +22,7 @@ def takeTable():
         print("sono nella cartella: " + str(dir))
         logging.warning("sono nella cartella: " + str(dir))
         if not checkDir("/home/gianlorenzo/AGIW/ProvaUl/"+dir)==1:
-            os.mkdir("/home/gianlorenzo/AGIW/JSONSTEP1(4)/"+dir)
+            os.mkdir("/home/gianlorenzo/AGIW/JSONSTEP1(5)/"+dir)
             listaFile = os.listdir("/home/gianlorenzo/AGIW/ProvaUl/"+dir)
             listaFile.remove("index.txt")
             listaFile.sort()
@@ -64,7 +64,7 @@ def takeTable():
                 while (i < len(o) - 1):
                     dict[o[i]] = o[i + 1]
                     i = i + 2
-                file = open("/home/gianlorenzo/AGIW/JSONSTEP1(4)/"+dir+"/"+str(j)+".json", "w+")
+                file = open("/home/gianlorenzo/AGIW/JSONSTEP1(5)/"+dir+"/"+str(j)+".json", "w+")
                 json.dump(dict, file)
                 file.close()
                 print("sono nella cartella: " + str(dir)+" ho scritto il file"+str(j)+".json")
