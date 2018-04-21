@@ -27,4 +27,5 @@ def createMatrixTagger(folderTrainDir):
 
     return matrixFeature
 
-print(createMatrixTagger(folderTrainDir))
+#print(createMatrixTagger(folderTrainDir))
+#createMatrixTagger(folderTrainDir).to_csv("file_name.csv", encoding='utf-8')
