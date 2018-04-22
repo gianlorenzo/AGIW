@@ -4,7 +4,7 @@
 import pandas as pd
 import os
 
-folderTrainDir = "/home/davben/Scrivania/FolderTrain"
+folderTrainDir = "/home/gianlorenzo/Scrivania/FolderTrain"
 
 def createMatrixTagger(folderTrainDir):
     matrixFeature = pd.DataFrame(columns = ["title","table","ul","target"])
@@ -27,5 +27,5 @@ def createMatrixTagger(folderTrainDir):
 
     return matrixFeature
 
-#print(createMatrixTagger(folderTrainDir))
-#createMatrixTagger(folderTrainDir).to_csv("file_name.csv", encoding='utf-8')
+print(createMatrixTagger(folderTrainDir))
+createMatrixTagger(folderTrainDir).to_csv("file_name.csv", encoding='utf-8')

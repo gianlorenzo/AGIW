@@ -11,7 +11,7 @@ def keywords(name,soup,found_titles):
     sys.stdout = log
     title = soup.title.string.split(" ")
     try:
-        title = soup.title.string.lower()
+        title1 = soup.title.string.lower()
         keywords = soup.select('meta[name="keywords"]')[0]['content'].lower().split(",")
 
         if name in keywords:
@@ -20,7 +20,7 @@ def keywords(name,soup,found_titles):
         cleaned_keywords = []
 
         for k in keywords:
-            for k in title:
+            for k in title1:
                 cleaned_keywords.append(k)
 
         return cleaned_keywords
