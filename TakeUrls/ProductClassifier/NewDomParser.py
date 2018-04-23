@@ -133,9 +133,9 @@ def getTagsFeatures():
             listaFile = os.listdir("/home/gianlorenzo/AGIW/provaT/" + dir)
             listaFile.remove("index.txt")
             listaFile.sort()
-            j = 1
-            for file in listaFile[0:3]:
-                os.mkdir("/home/gianlorenzo/AGIW/FINALJSON/" + dir + "/" + str(j) + ".html")
+
+            for file in listaFile:
+                os.mkdir("/home/gianlorenzo/AGIW/FINALJSON/" + dir + "/" + file)
                 f = codecs.open("/home/gianlorenzo/AGIW/provaT/" + dir + "/" + file, 'r')
                 html = f.read()
                 soup = bs4.BeautifulSoup(html, "html.parser")
@@ -191,26 +191,20 @@ def getTagsFeatures():
                 dictU = {}
                 dictU["Features:"] = oU
 
-            fileT = open("/home/gianlorenzo/AGIW/FINALJSON/" + dir + "/" + str(j) + ".html" + "/" + str(j) + "-table.json", "w+")
-            json.dump(dictT, fileT)
-            fileT.close()
+                fileT = open("/home/gianlorenzo/AGIW/FINALJSON/" + dir + "/" + file + "/table.json","w+")
+                json.dump(dictT, fileT)
+                fileT.close()
 
 
-            fileU = open("/home/gianlorenzo/AGIW/FINALJSON/" + dir + "/" + str(j) + ".html" + "/" + str(j) + "-ul.json", "w+")
+                fileU = open("/home/gianlorenzo/AGIW/FINALJSON/" + dir + "/" + file + "/ul.json","w+")
 
-            json.dump(dictU, fileU)
-            fileU.close()
+                json.dump(dictU, fileU)
+                fileU.close()
 
-
-
-            print("sono nella cartella: " + str(dir) + " ho scritto il file" + str(j) + "-table.json")
-            logging.warning("sono nella cartella: " + str(dir) + " ho scritto il file" + str(j) + ".json")
-            j = j + 1
 
 
         logging.warning("fine " + datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
         print("fine " + datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
 
 
-
-
+getTagsFeatures()
