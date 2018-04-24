@@ -260,7 +260,7 @@ def getTagsFeatures():
                         dictT[oT[i]] = oT[i + 1]
                         i = i + 2
 
-                    fileT = open("/home/davben/AGIW/FINALJSON/" + dir + "/" + file + "/table.json", "w+")
+                    fileT = open(AGIWdir+"FINALJSON/" + dir + "/" + file + "/table.json", "w+")
                     json.dump(dictT, fileT)
                     fileT.close()
                 #se non ci sono tabelle con keywords cerco nelle liste
@@ -275,7 +275,7 @@ def getTagsFeatures():
                     dictU = {}
                     dictU["Features:"] = oU
 
-                    fileU = open("/home/davben/AGIW/FINALJSON/" + dir + "/" + file + "/ul.json", "w+")
+                    fileU = open(AGIWdir+"FINALJSON/" + dir + "/" + file + "/ul.json", "w+")
 
                     json.dump(dictU, fileU)
                     fileU.close()
