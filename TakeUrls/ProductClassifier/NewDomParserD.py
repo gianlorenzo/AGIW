@@ -33,7 +33,7 @@ def bestArea(listaTableOrUl,wordList):
         if checkAreaWords(str(bestTag),wordList)<checkAreaWords(string,wordList):
             bestTag = tag
 
-    logging.warning("il best tag ha KEYWORDS SECONDARIE : "+str(checkAreaWords(str(bestTag),wordList)))
+    logging.warning("il best tag ha KEYWORDS SECONDARIE  : "+str(checkAreaWords(str(bestTag),wordList)))
     #se non ci sono piu di 2 keywords allora ipotizzo che quel tag sia un fake e non riturno nulla
     if checkAreaWords(str(bestTag),wordList)<4:
         return None
