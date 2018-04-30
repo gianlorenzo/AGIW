@@ -32,8 +32,8 @@ def bestArea(listaTableOrUl,wordList):
         string = str(tag)
         if checkAreaWords(str(bestTag),wordList)<checkAreaWords(string,wordList):
             bestTag = tag
-    logging.warning("riga 35")
-    logging.warning(checkAreaWords(str(bestTag),wordList))
+
+    logging.warning("il best tag ha KEYWORDS SECONDARIE : "+str(checkAreaWords(str(bestTag),wordList)))
     #se non ci sono piu di 2 keywords allora ipotizzo che quel tag sia un fake e non riturno nulla
     if checkAreaWords(str(bestTag),wordList)<4:
         return None
@@ -43,11 +43,14 @@ def bestArea(listaTableOrUl,wordList):
 def keywords(nomeDominio,soup):
     #log = open("kwLog.log","a")
     #sys.stdout = log
+    #if(not soup.title == None):
     title = soup.title.string.replace(",","").split(" ")
+    #title ="$"
 
     #logging.warning(str(title))
     #logging.warning("titolo principale: ok")
     try:
+
         #logging.warning("secondo titolo: ok")
         keywords = soup.select('meta[name="keywords"]')[0]['content'].lower().split(",")
 
@@ -70,6 +73,8 @@ def keywords(nomeDominio,soup):
        #logging.warning("ritorna title fuori")
        return ((title))
 
+
+#modificarlo e fare in modo che viene scelto il title se le keywords sono poche
 def keywordsUl(nomeDominio,soup):
     #log = open("kwLog.log","a")
     #sys.stdout = log
@@ -119,6 +124,7 @@ def getTable(dir,soup):
         listKWPrimarie = listKWPrimarieTradotto
     except:
         print("Html Language: english")
+    logging.warning("lista keyWords Secondarie : ")
     logging.warning(listKWSecondarie)
     if len(table)==0:
         return array
@@ -131,13 +137,20 @@ def getTable(dir,soup):
                         array.append(t)
     if len(array)==0:
         logging.warning("la lunghezza di table con kprimarie = 0")
-        bestTag = bestArea(table,listKWSecondarie)
         array = []
+        #if(len(table)==0):
+        #    return array
+        bestTag = bestArea(table, listKWSecondarie)
+        logging.warning("best tag in table con ksec = 0 "+ str(bestTag))
+        if (bestTag == None):
+            return array
         array.append(bestTag)
     if len(array)>1:
         logging.warning("la lunghezza di table con kprimarie >1")
         bestTag = bestArea(array,listKWSecondarie)
         array=[]
+        if (bestTag == None):
+            return array
         array.append(bestTag)
 
     return array
@@ -149,7 +162,7 @@ def getUl(dir, soup):
     kwFile = open(AGIWdir + "keywordsPrimarie.txt", "r")
     ul = soup.find_all("ul")
     array = []
-    listKWSecondarie = keywordsUl(dir, soup)
+    listKWSecondarie = keywords(dir, soup)
     translator = Translator()
     listKWPrimarie = getListKWPrimarie(kwFile)
     try:
@@ -170,14 +183,17 @@ def getUl(dir, soup):
                     array.append(u)
     if len(array) == 0:
     #non ci sono parole chiavi primarie
-        logging.warning("146 lunghezza array ul")
-        logging.warning(len(array))
-        bestTag = bestArea(ul, listKWSecondarie)
+        logging.warning("lunghezza array UL con kPRimarie: 0")
+        logging.warning("numero ul della pagina: "+str(len(ul)))
         array = []
+        if len(ul)==0:
+            return array
+        bestTag = bestArea(ul, listKWSecondarie)
+        if (bestTag == None):
+            return array
         array.append(bestTag)
     if len(array) > 1:
-        logging.warning("riga 179 lunghezza array ul")
-        logging.warning(len(array))
+        logging.warning("lunghezza array ul: "+str(len(array)))
         #in samsclub il file 11 html era schifoso aveva ul con parola product ma nessuna keyword rilevante
         #j = 0
         #for i in array:
@@ -187,8 +203,9 @@ def getUl(dir, soup):
 
         bestTag = bestArea(array, listKWSecondarie)
         array = []
-        if not bestTag == None:
-            array.append(bestTag)
+        if (bestTag == None):
+            return array
+        array.append(bestTag)
 
     return array
 
@@ -217,68 +234,70 @@ def getTagsFeatures():
                 f = codecs.open(AGIWdir+ProvaTdir + dir + "/" + file, 'r')
                 html = f.read()
                 soup = bs4.BeautifulSoup(html, "html.parser")
-                logging.warning("file: " + str(file))
+                #se il titolo non cè è una pagina robot!
+                if(soup.title and soup.title.string):
+                    logging.warning("file: " + str(file))
 
-                table = getTable(dir,soup)
-                #logging.warning((table))
-                logging.warning("presa table: ok ")
+                    table = getTable(dir,soup)
+                    #logging.warning((table))
+                    logging.warning("lunghezza table Depurata :" + str(len(table)))
 
-                ul = getUl(dir,soup)
-                logging.warning("presa ul: ok ")
-                oT = []
-                oU = []
-                if not len(table)==0:
-                    for t in table:
-                        logging.warning("table: ok ")
-                        for row in t.find_all('tr'):
-                            if "th" in str(row):
-                                for th in row.find_all('th'):
-                                    if "function" in th.text or "<!--" in th.text:
-                                        th.decompose()
-                                    else:
-                                        text = th.text.encode('ascii', errors='ignore')
-                                        oT.append(str(text).strip().replace("\\n", "").replace("b'", "").replace("\\t","").replace("\"",""))
-                                for td in row.find_all('td'):
-                                    if "function" in td.text or "<!--" in td.text:
-                                        td.decompose()
-                                    else:
-                                        text = td.text.encode('ascii', errors='ignore')
-                                        oT.append(str(text).strip().replace("\\n", "").replace("b'", "").replace("\\t","").replace("\"",""))
-                                    logging.warning("ot finale con th"+ str(oT))
-
-                            else:
-                                for td in row.find_all('td'):
+                    ul = getUl(dir,soup)
+                    logging.warning("lunghezza Ul Depurata :"+str(len(ul)))
+                    oT = []
+                    oU = []
+                    if not (len(table)==0) :
+                        for t in table:
+                            logging.warning("table: ok ")
+                            for row in t.find_all('tr'):
+                                if "th" in str(row):
+                                    for th in row.find_all('th'):
+                                        if "function" in th.text or "<!--" in th.text:
+                                            th.decompose()
+                                        else:
+                                            text = th.text.encode('ascii', errors='ignore')
+                                            oT.append(str(text).strip().replace("\\n", "").replace("b'", "").replace("\\t","").replace("\"",""))
+                                    for td in row.find_all('td'):
                                         if "function" in td.text or "<!--" in td.text:
                                             td.decompose()
                                         else:
                                             text = td.text.encode('ascii', errors='ignore')
-                                            oT.append(str(text).strip().replace("\\n","").replace("b'","").replace("\\t","").replace("\"",""))
-                            logging.warning("ot finale senza th"+ str(oT))
-                    i = 0
-                    dictT = {}
-                    while (i < len(oT) - 1):
-                        dictT[oT[i]] = oT[i + 1]
-                        i = i + 2
+                                            oT.append(str(text).strip().replace("\\n", "").replace("b'", "").replace("\\t","").replace("\"",""))
+                                        logging.warning("ot finale con th"+ str(oT))
 
-                    fileT = open(AGIWdir+"FINALJSON/" + dir + "/" + file + "/table.json", "w+")
-                    json.dump(dictT, fileT)
-                    fileT.close()
-                #se non ci sono tabelle con keywords cerco nelle liste
-                else:
-                    for u in ul:
-                        for li in u.find_all("li"):
-                            text = li.text.encode('ascii',errors='ignore')
-                            oU.append(str(text).replace("\\n","").replace("b'","").replace("\\t","").replace("\"",""))
-                    logging.warning("li finale" + str(oU))
+                                else:
+                                    for td in row.find_all('td'):
+                                            if "function" in td.text or "<!--" in td.text:
+                                                td.decompose()
+                                            else:
+                                                text = td.text.encode('ascii', errors='ignore')
+                                                oT.append(str(text).strip().replace("\\n","").replace("b'","").replace("\\t","").replace("\"",""))
+                                logging.warning("ot finale senza th"+ str(oT))
+                        i = 0
+                        dictT = {}
+                        while (i < len(oT) - 1):
+                            dictT[oT[i]] = oT[i + 1]
+                            i = i + 2
+
+                        fileT = open(AGIWdir+"FINALJSON/" + dir + "/" + file + "/table.json", "w+")
+                        json.dump(dictT, fileT)
+                        fileT.close()
+                    #se non ci sono tabelle con keywords cerco nelle liste
+                    else:
+                        for u in ul:
+                            for li in u.find_all("li"):
+                                text = li.text.encode('ascii',errors='ignore')
+                                oU.append(str(text).replace("\\n","").replace("b'","").replace("\\t","").replace("\"",""))
+                        logging.warning("li finale" + str(oU))
 
 
-                    dictU = {}
-                    dictU["Features:"] = oU
+                        dictU = {}
+                        dictU["Features:"] = oU
 
-                    fileU = open(AGIWdir+"FINALJSON/" + dir + "/" + file + "/ul.json", "w+")
+                        fileU = open(AGIWdir+"FINALJSON/" + dir + "/" + file + "/ul.json", "w+")
 
-                    json.dump(dictU, fileU)
-                    fileU.close()
+                        json.dump(dictU, fileU)
+                        fileU.close()
 
 
 
