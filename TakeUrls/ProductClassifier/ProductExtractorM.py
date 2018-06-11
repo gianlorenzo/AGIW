@@ -2,10 +2,14 @@ import os
 import pandas as pd
 from pandas import DataFrame
 import numpy as np
+import logging
+from datetime import datetime
+import sys
+
 
 #dir che porta alla cartella occurrence extractor
-dirInputNotebook = "/home/gianlorenzo/AGIW/notebook"
-dirGlobaleDav = "/home/gianlorenzo/AGIW/app/occurrence-extractor"
+dirInputNotebook = "/home/gianlorenzo/AGIW/notebook/"
+dirGlobaleDav = "/home/gianlorenzo/AGIW/occurrence-extractor"
 dirOutputGlobaleDav="/home/gianlorenzo/AGIW/Step1/"
 comandoDir="cd "+dirGlobaleDav
 comandoClassifier="python2.7 -m src.model.specificationextractor "
@@ -19,17 +23,32 @@ def checkDir(dir):
 #scansiono le cartelle
 #se nella cartella ci sta solo il file index passo alla prossima (checkdir==1)
 #altrimenti eseguo il metodo per ciascun link del file index,gia ripulito dai link tarocchi
-def getProductSpecifies(dirNotebook):
+def getProductSpecifies(dirInputNotebook):
     os.mkdir(dirOutputGlobaleDav)
+    log = open("/home/gianlorenzo/AGIW/Step1/writeLogJson.log","a")
+    sys.stdout = log
+    print("start "+datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
+    logging.warning("start "+datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
     os.system(comandoDir)
-    listadir = os.listdir(dirNotebook)
+    listadir = os.listdir(dirInputNotebook)
     for dir in listadir:
-        if not checkDir(dirNotebook+dir)==1:
+	print("sono nella cartella: "+str(dir))
+	logging.warning("sono nella cartella: "+str(dir))
+        if not checkDir(dirInputNotebook+dir)==1:
             os.mkdir(dirOutputGlobaleDav+dir)
             URLBuone = getReachable_Links(dir)
+	    a = 1
             for i in URLBuone:
                 #applico il classificatore
-                os.system(comandoClassifier+" "+i+" "+dirOutputGlobaleDav+dir+i.json)
+                os.system(comandoClassifier+" "+i+" "+dirOutputGlobaleDav+dir+"/"+str(a))
+		print("Nella cartella: "+str(dir)+" ho scritto il file: " + str(a)+".json")
+		logging.warning("Nella cartella: "+str(dir)+" ho scritto il file: " + str(a)+".json")
+		a = a+1
+    logging.warning("fine " + datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
+    print("fine " + datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
+
+
+
 
 
 #prendo il file index e lo trasformo in una matrice :link,errore/nomefile
@@ -37,7 +56,7 @@ def getProductSpecifies(dirNotebook):
 #seleziono solo la colonna dei links
 #inserisco tutti i link in un array
 def getReachable_Links(dir):
-    with open(dir+"/index.txt") as f:
+    with open("/home/gianlorenzo/AGIW/notebook/"+dir+"/index.txt") as f:
 
         linksMatrix = pd.read_table(f,header=None, names=['Link', 'Esito'])
     print(type(linksMatrix))
@@ -52,10 +71,5 @@ def getReachable_Links(dir):
     #restituisco lista di html puliti
     return np.asarray(linksMatrixFormatted["Link"])
 
-dirConUrl_Error = "/home/davben/AGIW/notebook/www.shopwithjoe.com"
-dirConURl = "/home/davben/AGIW/notebook/www.shopandship.co.za"
-dirSenzaUrl="/home/davben/AGIW/notebook/53laptop.com"
+getProductSpecifies(dirInputNotebook)
 
-#print(getReachable_Links("/home/davben/AGIW/notebook/www.shopwithjoe.com"))
-print(checkDir(dirSenzaUrl))
-#df.loc[df[["B"].endswith(".html")]
