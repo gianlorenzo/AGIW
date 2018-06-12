@@ -1,9 +1,9 @@
-import sys
 import os
 from datetime import datetime
 import logging
 import codecs
 import bs4
+import sys
 from googletrans import Translator
 import json
 

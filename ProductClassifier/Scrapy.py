@@ -1,7 +1,7 @@
 import codecs
 import parsel
 import re
-import TakeUrls.ProductClassifier.DomParser as dm
+
 
 def prova():
     dir = "/home/gianlorenzo/AGIW/FileProvaClassifier/28.html"

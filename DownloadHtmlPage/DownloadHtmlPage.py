@@ -1,4 +1,5 @@
 import json
+
 import urllib.request
 import urllib.error
 import urllib.parse
@@ -10,20 +11,19 @@ from datetime import datetime
 import http.client
 from socket import error as SocketError
 
+pathJsonFile = '/home/gianlorenzo/AGIW/dexter_urls_category_notebook.json'
+dirOutput = '/home/gianlorenzo/AGIW/'
+dirOutputNotebook = '/home/gianlorenzo/AGIW/notebook/'
+
 
 #Legge file .json. Ritorna un dizionario con {nome sito web, array di url}
 def readJson():
-    return json.load(open('/home/gianlorenzo/AGIW/www.kkelectronic.com.json'))
-
-def writeExc():
-    f = open ("/home/gianlorenzo/htmlexc/www.kkelectronic.com/index.txt","w+")
-    for value in readJson()["www.kkelectronic.com"]:
-        f.write(str(value)+"   "+"Not Found"+"\n")
-    f.close()
+    return json.load(open(pathJsonFile))
 
 #Ritorna tutte le chiavi del dizionario
 def takeAllKeys():
    return list(readJson())
+
 
 #Urllib è una libreria python che fornisce un'interfaccia con il world wide web. La sua funzione urlopen()
 #accetta in input la URL di un sito web e ritorna la pagine web stessa il cui codice viene letto attraverso la funzione read()
@@ -32,33 +32,22 @@ def takeAllKeys():
 def takeHtmlContent(url):
     request = urllib.request.Request(url)
     result = urllib.request.urlopen(request)
-    resultText = result.read()
-    soup = BeautifulSoup(resultText,"lxml")
+    soup = BeautifulSoup(result.read(),"lxml")
     return soup
 
-
-def openUrl(url):
-    request = urllib.request.Request(url)
-    result = urllib.request.urlopen(request)
-    resultText = result.read()
-    return resultText
-
-
-def writeAllFile():
+def downloadHtmlFile():
     log = open("writeAllFile.log", "a")
     sys.stdout = log
     print("start "+datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
     logging.warning("start "+datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
     keys = takeAllKeys()
-    print("prese le chiavi..")
-    os.makedirs("notebook")
-    print("creata dir notebook")
+    os.makedirs(dirOutput+"notebook")
     logging.warning("creata dir notebook")
     for key in keys:
         logging.warning("creo cartella: " + str(key))
-        os.makedirs("/home/gianlorenzo/PycharmProjects/AGIW/TakeUrls/notebook/"+str(key))
+        os.makedirs(dirOutputNotebook+str(key))
         print("creata dir: " + str(key) + "..")
-        index = open("/home/gianlorenzo/PycharmProjects/AGIW/TakeUrls/notebook/"+str(key)+"/"+"index.txt","w+")
+        index = open(dirOutputNotebook+str(key)+"/"+"index.txt","w+")
         i=1
         print("leggo lista di html in chiave: "+str(key)+"..")
         for value in readJson()[key]:
@@ -83,7 +72,7 @@ def writeAllFile():
             else:
                 index.write(str(value)+"\t"+str(i)+".html"+"\n")
                 print("scrivo "+str(i)+".html"+" in "+str(key))
-                html = open("/home/gianlorenzo/PycharmProjects/AGIW/TakeUrls/notebook/"+str(key)+"/"+str(i)+".html","w+")
+                html = open(dirOutputNotebook+str(key)+"/"+str(i)+".html","w+")
                 html.write(str(soup))
                 html.close()
             i = i+1
@@ -98,3 +87,4 @@ def writeAllFile():
 
 
 
+writeAllFile()
