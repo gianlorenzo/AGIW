@@ -87,4 +87,3 @@ def downloadHtmlFile():
 
 
 
-writeAllFile()

@@ -1,6 +1,7 @@
 import json
 import os
 import shutil
+import sys
 
 pathJsonFile = '/home/gianlorenzo/AGIW/dexter_urls_category_notebook.json'
 dirOutputNotebook = '/home/gianlorenzo/AGIW/notebook/'
@@ -11,6 +12,7 @@ def readJson():
 
 def takeAllKeys():
    return list(readJson())
+
 
 def checkDir(dir):
     # print(len([name for name in os.listdir(dir) if os.path.isfile(os.path.join(dir, name))]))
@@ -41,6 +43,7 @@ def getNumbersOfDataset():
             i = i+1
     print ("Numero pagine: "+ str(i))
 
+getNumbersOfDataset()
 
 # Ritorna numero cartelle per le quali funziona almeno una url
 def getNumberOfOneUrl():
@@ -50,6 +53,8 @@ def getNumberOfOneUrl():
         if not checkDir(dirOutputNotebook+dir)==1:
             i = i+1
     print("Numero cartelle per le quali funziona almeno una url: "+str(i))
+
+getNumberOfOneUrl()
 
 
 
@@ -65,6 +70,7 @@ def getTotalUrlOk():
                 i = i+1
     print("Numero url funzionanti: "+ str(i))
 
+getTotalUrlOk()
 
 # Elimina le cartelle doppioni
 def getDirOk():
@@ -97,3 +103,26 @@ def getNumberoOfJson():
     print("Numero totale di json non vuoti:" + str(i))
 
 
+
+def checkFile():
+    log = open("myLog.log","a")
+    sys.stdout = log
+    listaDir = os.listdir("/home/gianlorenzo/AGIW/JSONSTEP1(4)/")
+    vuotiTotali = 0
+    pieniTotali = 0
+    for dir in listaDir:
+        listaFile = os.listdir("/home/gianlorenzo/AGIW/JSONSTEP1(4)/"+dir)
+        vuoto = 0
+        pieno = 0
+        for file in listaFile:
+            f = open("/home/gianlorenzo/AGIW/JSONSTEP1(4)/"+dir+"/"+file)
+            if f.read()=="{}" or f.read()=="{"": ""}":
+                vuoto = vuoto + 1
+
+            else:
+                pieno = pieno + 1
+        pieniTotali = pieniTotali+pieno
+        vuotiTotali = vuotiTotali+vuoto
+
+        print("Nella cartella "+dir+"ho un numero di file vuoti = a "+str(vuoto)+" e di file pieni = a "+str(pieno))
+    print(str(pieniTotali),str(vuotiTotali))

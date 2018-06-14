@@ -1,6 +1,5 @@
 import os
 import pandas as pd
-from pandas import DataFrame
 import numpy as np
 import logging
 from datetime import datetime
@@ -55,9 +54,8 @@ def getProductSpecifies(dirInputNotebook):
 #seleziono solo le righe corrette
 #seleziono solo la colonna dei links
 #inserisco tutti i link in un array
-def getReachable_Links(dir):
-    with open("/home/gianlorenzo/AGIW/notebook/"+dir+"/index.txt") as f:
-
+def getReachable_Links(currentDirectory):
+    with open(dirInputNotebook+currentDirectory+"/index.txt") as f:
         linksMatrix = pd.read_table(f,header=None, names=['Link', 'Esito'])
     print(type(linksMatrix))
     htmls=[]
