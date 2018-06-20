@@ -5,7 +5,7 @@ import sys
 
 pathJsonFile = '/home/gianlorenzo/AGIW/dexter_urls_category_notebook.json'
 dirOutputNotebook = '/home/gianlorenzo/AGIW/notebook/'
-dirOutputJson = '/home/gianlorenzo/AGIW/json/'
+dirOutputJson = '/home/gianlorenzo/AGIW/FINALJSON(MERIALDO)/'
 
 def readJson():
     return json.load(open('/home/gianlorenzo/AGIW/dexter_urls_category_notebook.json'))
@@ -33,7 +33,6 @@ def getTotalDirectoryWithHtml(url):
     print(str(len))
     print(str(numDir))
 
-
 # Ritorna numero cartelle e url totali
 def getNumbersOfDataset():
     print ("Numero cartelle :" + str(len(readJson().keys())))
@@ -43,8 +42,6 @@ def getNumbersOfDataset():
             i = i+1
     print ("Numero pagine: "+ str(i))
 
-getNumbersOfDataset()
-
 # Ritorna numero cartelle per le quali funziona almeno una url
 def getNumberOfOneUrl():
     listadir = os.listdir(dirOutputNotebook)
@@ -53,9 +50,6 @@ def getNumberOfOneUrl():
         if not checkDir(dirOutputNotebook+dir)==1:
             i = i+1
     print("Numero cartelle per le quali funziona almeno una url: "+str(i))
-
-getNumberOfOneUrl()
-
 
 
 # Ritorna numero url funzionanti:
@@ -69,8 +63,6 @@ def getTotalUrlOk():
             for file in listaFile:
                 i = i+1
     print("Numero url funzionanti: "+ str(i))
-
-getTotalUrlOk()
 
 # Elimina le cartelle doppioni
 def getDirOk():
@@ -88,9 +80,52 @@ def removeDirWithNoHtml():
         if checkDir(dirOutputNotebook+dir) == 1:
             shutil.rmtree(dirOutputNotebook+dir)
 
-
 # Ritorna numero url che hanno prodotto json
 def getNumberoOfJson():
+    listaDir = os.listdir(dirOutputJson)
+    listaDir.remove("writeLogJson.log")
+    i = 0
+    for dir in listaDir:
+        if not checkDir(dirOutputJson + dir) == 1:
+            listaSubDir = os.listdir(dirOutputJson + dir)
+            for subDir in listaSubDir:
+                listaFile = os.listdir(dirOutputJson + dir + "/" + subDir)
+                for file in listaFile:
+                    f = open(dirOutputJson + dir +"/"+subDir + "/" + file)
+                    if not f.read()=="{}" or not f.read()=="{"": ""}" or not f.read()=="[]" or not f.read()=="[{}]" or not f.read()=="Features: []" :
+                        i = i+1
+    print("Numero totale di json non vuoti:" + str(i))
+
+def checkFile():
+    log = open("myLog.log","a")
+    sys.stdout = log
+    listaDir = os.listdir(dirOutputJson)
+    listaDir.remove("writeLogJson.log")
+    vuotiTotali = 0
+    pieniTotali = 0
+    for dir in listaDir:
+        listaSubDir = os.listdir(dirOutputJson+dir)
+        vuoto = 0
+        pieno = 0
+        for subDir in listaSubDir:
+
+            listaFile = os.listdir(dirOutputJson+dir+"/"+subDir)
+
+            for file in listaFile:
+                f = open(dirOutputJson+dir+"/"+subDir+"/"+file)
+                if f.read()=="{}" or f.read()=="{"": ""}" or f.read()=="[]" or f.read()=="[{}]" or f.read()=="Features: []" :
+                    vuoto = vuoto + 1
+
+                else:
+                    pieno = pieno + 1
+        pieniTotali = pieniTotali+pieno
+        vuotiTotali = vuotiTotali+vuoto
+
+        print("Nella cartella " + dir+" "+"ho un numero di file vuoti = a "+str(vuoto)+" e di file pieni = a "+str(pieno))
+    print("File totali pieni: "+" "+str(pieniTotali)," File totali vuoti: "+str(vuotiTotali))
+
+# Ritorna numero url che hanno prodotto json
+def getNumberoOfJsonSPEXA():
     listaDir = os.listdir(dirOutputJson)
     i = 0
     for dir in listaDir:
@@ -102,21 +137,19 @@ def getNumberoOfJson():
                     i = i+1
     print("Numero totale di json non vuoti:" + str(i))
 
-
-
-def checkFile():
+def checkFileSPEXA():
     log = open("myLog.log","a")
     sys.stdout = log
-    listaDir = os.listdir("/home/gianlorenzo/AGIW/JSONSTEP1(4)/")
+    listaDir = os.listdir(dirOutputJson)
     vuotiTotali = 0
     pieniTotali = 0
     for dir in listaDir:
-        listaFile = os.listdir("/home/gianlorenzo/AGIW/JSONSTEP1(4)/"+dir)
+        listaFile = os.listdir(dirOutputJson+dir)
         vuoto = 0
         pieno = 0
         for file in listaFile:
-            f = open("/home/gianlorenzo/AGIW/JSONSTEP1(4)/"+dir+"/"+file)
-            if f.read()=="{}" or f.read()=="{"": ""}":
+            f = open(dirOutputJson+dir+"/"+file)
+            if f.read()=="[]" or f.read()=="[{}]":
                 vuoto = vuoto + 1
 
             else:
@@ -126,3 +159,5 @@ def checkFile():
 
         print("Nella cartella "+dir+"ho un numero di file vuoti = a "+str(vuoto)+" e di file pieni = a "+str(pieno))
     print(str(pieniTotali),str(vuotiTotali))
+
+checkFileSPEXA()

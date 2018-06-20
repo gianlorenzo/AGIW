@@ -9,13 +9,14 @@ from ProductClassifier import GetKeywords as gk
 from ProductClassifier import GetTableAndUl as gt
 
 AGIWdir = "/home/gianlorenzo/AGIW/"
-ProvaTdir = "provaT/"
+ProvaTdir = "camera/"
+dirOutput = "FINALJSONCAMERA"
 
 def getTagsFeatures():
     log = open("logFile.log","a")
     sys.stdout = log
-    os.mkdir(AGIWdir+"FINALJSON")
-    log = open(AGIWdir+"FINALJSON/writeLogJson.log", "a")
+    os.mkdir(AGIWdir+dirOutput)
+    log = open(AGIWdir+dirOutput+"/"+"writeLogJson.log", "a")
     sys.stdout = log
     print("start " + datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
     logging.warning("start " + datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
@@ -24,13 +25,13 @@ def getTagsFeatures():
         print("sono nella cartella: " + str(dir))
         logging.warning("sono nella cartella: " + str(dir))
         if not gk.checkDir(AGIWdir+ProvaTdir + dir) == 1:
-            os.mkdir(AGIWdir+"FINALJSON/" + dir)
+            os.mkdir(AGIWdir+dirOutput+"/" + dir)
             listaFile = os.listdir(AGIWdir+ProvaTdir + dir)
             listaFile.remove("index.txt")
             listaFile.sort()
 
             for file in listaFile:
-                os.mkdir(AGIWdir+"FINALJSON/" + dir + "/" + file)
+                os.mkdir(AGIWdir+dirOutput+"/" + dir + "/" + file)
                 f = codecs.open(AGIWdir+ProvaTdir + dir + "/" + file, 'r')
                 html = f.read()
                 soup = bs4.BeautifulSoup(html, "html.parser")
@@ -67,7 +68,7 @@ def getTagsFeatures():
 
                                 else:
                                     for td in row.find_all('td'):
-                                            if "function" in td.text or "<!--" in td.text:
+                                            if "function" in td.text or "<!--" in td.text or "var" in td.text or "http" in td.text:
                                                 td.decompose()
                                             else:
                                                 text = td.text.encode('ascii', errors='ignore')
@@ -79,7 +80,7 @@ def getTagsFeatures():
                             dictT[oT[i]] = oT[i + 1]
                             i = i + 2
 
-                        fileT = open(AGIWdir+"FINALJSON/" + dir + "/" + file + "/table.json", "w+")
+                        fileT = open(AGIWdir+dirOutput+"/" + dir + "/" + file + "/table.json", "w+")
                         json.dump(dictT, fileT)
                         fileT.close()
                     #se non ci sono tabelle con keywords cerco nelle liste
@@ -94,7 +95,7 @@ def getTagsFeatures():
                         dictU = {}
                         dictU["Features:"] = oU
 
-                        fileU = open(AGIWdir+"FINALJSON/" + dir + "/" + file + "/ul.json", "w+")
+                        fileU = open(AGIWdir+dirOutput+"/" + dir + "/" + file + "/ul.json", "w+")
 
                         json.dump(dictU, fileU)
                         fileU.close()
