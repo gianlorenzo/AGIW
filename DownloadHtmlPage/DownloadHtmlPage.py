@@ -67,7 +67,7 @@ def downloadHtmlFile():
                 index.write(str(value) + "\t" + "HTTPException" + "\n")
                 logging.warning("non scrivo " + str(i) + ".html" + " in " + str(key))
             except SocketError:
-                index.write(str(value) + "\t" + "HTTPException" + "\n")
+                index.write(str(value) + "\t" + "SocketException" + "\n")
                 logging.warning("non scrivo " + str(i) + ".html" + " in " + str(key))
             else:
                 index.write(str(value)+"\t"+str(i)+".html"+"\n")

@@ -5,7 +5,7 @@ import sys
 
 pathJsonFile = '/home/gianlorenzo/AGIW/dexter_urls_category_notebook.json'
 dirOutputNotebook = '/home/gianlorenzo/AGIW/notebook/'
-dirOutputJson = '/home/gianlorenzo/AGIW/FINALJSON(MERIALDO)/'
+dirOutputJson = '/home/gianlorenzo/AGIW/FINALJSON/'
 
 def readJson():
     return json.load(open('/home/gianlorenzo/AGIW/dexter_urls_category_notebook.json'))
@@ -63,6 +63,7 @@ def getTotalUrlOk():
             for file in listaFile:
                 i = i+1
     print("Numero url funzionanti: "+ str(i))
+getTotalUrlOk()
 
 # Elimina le cartelle doppioni
 def getDirOk():
@@ -160,4 +161,3 @@ def checkFileSPEXA():
         print("Nella cartella "+dir+"ho un numero di file vuoti = a "+str(vuoto)+" e di file pieni = a "+str(pieno))
     print(str(pieniTotali),str(vuotiTotali))
 
-checkFileSPEXA()
