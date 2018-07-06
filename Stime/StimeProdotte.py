@@ -8,7 +8,7 @@ dirOutputNotebook = '/home/gianlorenzo/AGIW/notebook/'
 dirOutputJson = '/home/gianlorenzo/AGIW/FINALJSON/'
 
 def readJson():
-    return json.load(open('/home/gianlorenzo/AGIW/dexter_urls_category_notebook.json'))
+    return json.load(open(pathJsonFile))
 
 def takeAllKeys():
    return list(readJson())

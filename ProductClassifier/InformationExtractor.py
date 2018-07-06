@@ -9,8 +9,8 @@ from ProductClassifier import GetKeywords as gk
 from ProductClassifier import GetTableAndUl as gt
 
 AGIWdir = "/home/gianlorenzo/AGIW/"
-ProvaTdir = "camera/"
-dirOutput = "FINALJSONCAMERA"
+dirHtml = "provaT/"
+dirOutput = "FINALJSONTEST"
 
 def getTagsFeatures():
     log = open("logFile.log","a")
@@ -20,19 +20,19 @@ def getTagsFeatures():
     sys.stdout = log
     print("start " + datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
     logging.warning("start " + datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
-    listaDir = os.listdir(AGIWdir+ProvaTdir)
+    listaDir = os.listdir(AGIWdir + dirHtml)
     for dir in listaDir:
         print("sono nella cartella: " + str(dir))
         logging.warning("sono nella cartella: " + str(dir))
-        if not gk.checkDir(AGIWdir+ProvaTdir + dir) == 1:
+        if not gk.checkDir(AGIWdir + dirHtml + dir) == 1:
             os.mkdir(AGIWdir+dirOutput+"/" + dir)
-            listaFile = os.listdir(AGIWdir+ProvaTdir + dir)
+            listaFile = os.listdir(AGIWdir + dirHtml + dir)
             listaFile.remove("index.txt")
             listaFile.sort()
 
             for file in listaFile:
                 os.mkdir(AGIWdir+dirOutput+"/" + dir + "/" + file)
-                f = codecs.open(AGIWdir+ProvaTdir + dir + "/" + file, 'r')
+                f = codecs.open(AGIWdir + dirHtml + dir + "/" + file, 'r')
                 html = f.read()
                 soup = bs4.BeautifulSoup(html, "html.parser")
                 #se il titolo non cè è una pagina robot!

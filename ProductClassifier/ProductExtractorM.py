@@ -8,9 +8,9 @@ import sys
 
 #dir che porta alla cartella occurrence extractor
 dirInputNotebook = "/home/gianlorenzo/AGIW/notebook/"
-dirGlobaleDav = "/home/gianlorenzo/AGIW/occurrence-extractor"
-dirOutputGlobaleDav="/home/gianlorenzo/AGIW/Step1/"
-comandoDir="cd "+dirGlobaleDav
+dirSPEXA = "/home/gianlorenzo/AGIW/occurrence-extractor"
+dirOutput= "/home/gianlorenzo/AGIW/Step1/"
+comandoDir="cd " + dirSPEXA
 comandoClassifier="python2.7 -m src.model.specificationextractor "
 # se nella cartella ci sta solo un index non la analizzo
 #checkDir mi dice quanti oggetti ci sono in una cartella
@@ -23,7 +23,7 @@ def checkDir(dir):
 #se nella cartella ci sta solo il file index passo alla prossima (checkdir==1)
 #altrimenti eseguo il metodo per ciascun link del file index,gia ripulito dai link tarocchi
 def getProductSpecifies(dirInputNotebook):
-    os.mkdir(dirOutputGlobaleDav)
+    os.mkdir(dirOutput)
     log = open("/home/gianlorenzo/AGIW/Step1/writeLogJson.log","a")
     sys.stdout = log
     print("start "+datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
@@ -34,12 +34,12 @@ def getProductSpecifies(dirInputNotebook):
 	print("sono nella cartella: "+str(dir))
 	logging.warning("sono nella cartella: "+str(dir))
         if not checkDir(dirInputNotebook+dir)==1:
-            os.mkdir(dirOutputGlobaleDav+dir)
+            os.mkdir(dirOutput + dir)
             URLBuone = getReachable_Links(dir)
 	    a = 1
             for i in URLBuone:
                 #applico il classificatore
-                os.system(comandoClassifier+" "+i+" "+dirOutputGlobaleDav+dir+"/"+str(a))
+                os.system(comandoClassifier +" " + i +" " + dirOutput + dir + "/" + str(a))
 		print("Nella cartella: "+str(dir)+" ho scritto il file: " + str(a)+".json")
 		logging.warning("Nella cartella: "+str(dir)+" ho scritto il file: " + str(a)+".json")
 		a = a+1
