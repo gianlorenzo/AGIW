@@ -10,10 +10,7 @@ def checkDir(dir):
 
 def checkAreaWords(stringX,wordList):
     score = 0
-    #logging.warning(stringX)
     for word in wordList:
-        #logging.warning("21")
-        #logging.warning(word)
         if word in stringX or word.lower() in stringX:
             score = score +1
 

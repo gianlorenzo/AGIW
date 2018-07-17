@@ -7,8 +7,6 @@ from googletrans import Translator
 AGIWdir = "/home/gianlorenzo/AGIW/"
 
 def getTable(dir,soup):
-    #log = open("tableLog.log","a")
-    #sys.stdout = log
     kwFile = open(AGIWdir+"keywordsPrimarie.txt", "r")
     table = soup.find_all("table")
     array = []
@@ -37,8 +35,6 @@ def getTable(dir,soup):
     if len(array)==0:
         logging.warning("la lunghezza di table con kprimarie = 0")
         array = []
-        #if(len(table)==0):
-        #    return array
         bestTag = gk.bestArea(table, listKWSecondarie)
         logging.warning("best tag in table con ksec = 0 "+ str(bestTag))
         if (bestTag == None):
@@ -56,8 +52,6 @@ def getTable(dir,soup):
 
 
 def getUl(dir, soup):
-    # log = open("tableLog.log","a")
-    # sys.stdout = log
     kwFile = open(AGIWdir + "keywordsPrimarie.txt", "r")
     ul = soup.find_all("ul")
     array = []

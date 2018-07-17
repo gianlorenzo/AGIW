@@ -9,8 +9,8 @@ from ProductClassifier import GetKeywords as gk
 from ProductClassifier import GetTableAndUl as gt
 
 AGIWdir = "/home/gianlorenzo/AGIW/"
-dirHtml = "provaT/"
-dirOutput = "FINALJSONTEST"
+dirHtml = "notebook/"
+dirOutput = "Json"
 
 def getTagsFeatures():
     log = open("logFile.log","a")
@@ -40,7 +40,6 @@ def getTagsFeatures():
                     logging.warning("file: " + str(file))
 
                     table = gt.getTable(dir,soup)
-                    #logging.warning((table))
                     logging.warning("lunghezza table Depurata :" + str(len(table)))
 
                     ul = gt.getUl(dir,soup)

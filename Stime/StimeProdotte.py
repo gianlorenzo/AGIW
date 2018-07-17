@@ -13,7 +13,6 @@ def readJson():
 def takeAllKeys():
    return list(readJson())
 
-
 def checkDir(dir):
     # print(len([name for name in os.listdir(dir) if os.path.isfile(os.path.join(dir, name))]))
     return (len(os.listdir(dir)))
@@ -51,7 +50,6 @@ def getNumberOfOneUrl():
             i = i+1
     print("Numero cartelle per le quali funziona almeno una url: "+str(i))
 
-
 # Ritorna numero url funzionanti:
 def getTotalUrlOk():
     listadir = os.listdir(dirOutputNotebook)
@@ -63,7 +61,6 @@ def getTotalUrlOk():
             for file in listaFile:
                 i = i+1
     print("Numero url funzionanti: "+ str(i))
-getTotalUrlOk()
 
 # Elimina le cartelle doppioni
 def getDirOk():
